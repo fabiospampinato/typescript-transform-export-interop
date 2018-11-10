@@ -32,7 +32,7 @@
     "export",
     "interop",
     "import",
-    "node.js"
+    "node"
   ],
   "dependencies": {
     "caporal": "git://github.com/fabiospampinato/Caporal.js#cf0f5eeefb2e04cc07798bf4a45d6bda5e2a2f63",
