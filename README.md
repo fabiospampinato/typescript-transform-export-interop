@@ -24,7 +24,7 @@ In order to do this your code must be exported in a particular, super-ugly, [way
 
 1. Export your modules as `export default Foo`, if you need multiple exports don't export a default one.
 
-2. Add `tstei` to your compilation step: `tsc && tstei`
+2. Add `tstei` to your compilation chain: `tsc && tstei`.
 
 ## Notes
 
