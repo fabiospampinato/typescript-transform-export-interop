@@ -14,7 +14,7 @@ const DTS = {
 
   re: Utils.parseRe ({
     exportAll: /^export \* from/gm,
-    exportDefault: /^export default (\w*) ;?$/gm,
+    exportDefault: /^export default ([^;\n]+) ;?$/gm,
     exportEquals: /^export = /gm,
     exportMulti: /^export {([^}]*)} ;?$/gm,
     exportOther: /^export (?:function|class|var|let|class|type|interface|namespace)/gm
@@ -61,15 +61,19 @@ const DTS = {
 
       const indentation = detectIndent ( content ).indent || Config.indentation,
             exportName = DTS.re.exportDefault.exec ( content )[1],
-            exportLines = [
-              `declare const ${namespace}: typeof ${exportName} & {`,
-              `${indentation}default: typeof ${exportName};`,
-              `}`,
-              `declare namespace ${namespace} {`,
-              `${indentation}export type type = ${exportName};`,
-              `}`,
-              `export = ${namespace};`
-            ];
+            isSimpleExport = /^\w+$/.test ( exportName );
+
+      if ( !isSimpleExport ) Utils.exit ( 'Only simple default exports are supported' );
+
+      const exportLines = [
+        `declare const ${namespace}: typeof ${exportName} & {`,
+        `${indentation}default: typeof ${exportName};`,
+        `}`,
+        `declare namespace ${namespace} {`,
+        `${indentation}export type type = ${exportName};`,
+        `}`,
+        `export = ${namespace};`
+      ];
 
       content = content.replace ( DTS.re.exportDefault, exportLines.join ( '\n' ) );
 

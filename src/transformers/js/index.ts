@@ -15,9 +15,9 @@ const JS = {
 
   re: Utils.parseRe ({
     __esModule: /^Object\.defineProperty \( exports , ['"`]__esModule['"`] , { value : true } \) ;?$\n?/gm,
-    exportDefault: /^exports\.default = (\w*) ;?$/gm,
+    exportDefault: /^exports\.default = ([^;\n]+) ;?$/gm,
     exportEquals: /^module\.exports = /gm,
-    exportMulti: /^exports\.(?!default)(\w+) = (\w*) ;?$/gm
+    exportMulti: /^exports\.(?!default)(\w+) = ([^;\n]+) ;?$/gm
   }) as any,
 
   getFilePath () {
@@ -64,11 +64,15 @@ const JS = {
       if ( __esModuleNr > 1 ) Utils.exit ( 'More than one "__esModule" found' );
 
       const exportName = JS.re.exportDefault.exec ( content )[1],
-            exportLines = [
-              `module.exports = ${exportName};`,
-              `module.exports.default = ${exportName};`,
-              'Object.defineProperty(module.exports, "__esModule", { value: true });'
-            ];
+            isSimpleExport = /^\w+$/.test ( exportName );
+
+      if ( !isSimpleExport ) Utils.exit ( 'Only simple default exports are supported' );
+
+      const exportLines = [
+        `module.exports = ${exportName};`,
+        `module.exports.default = ${exportName};`,
+        'Object.defineProperty(module.exports, "__esModule", { value: true });'
+      ];
 
       content = content.replace ( JS.re.__esModule, '' )
                       .replace ( JS.re.exportDefault, exportLines.join ( '\n' ) );
