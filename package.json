@@ -35,6 +35,8 @@
     "node"
   ],
   "dependencies": {
+    "@types/lodash": "^4.14.118",
+    "@types/node": "^10.12.8",
     "caporal": "git://github.com/fabiospampinato/Caporal.js#cf0f5eeefb2e04cc07798bf4a45d6bda5e2a2f63",
     "chalk": "^2.4.1",
     "detect-indent": "^5.0.0",
@@ -45,8 +47,6 @@
     "update-notifier": "^2.2.0"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.118",
-    "@types/node": "^10.9.4",
     "rimraf": "^2.6.0",
     "typescript": "^3.0.3"
   }
