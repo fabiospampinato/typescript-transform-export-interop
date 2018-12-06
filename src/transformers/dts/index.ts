@@ -4,6 +4,7 @@
 import * as _ from 'lodash';
 import * as detectIndent from 'detect-indent';
 import matches from 'string-matches';
+import * as TypeScript from 'typescript';
 import Config from '../../config';
 import Utils from '../../utils';
 import JS from '../js';
@@ -27,6 +28,16 @@ const DTS = {
     if ( !filePath ) return;
 
     return filePath.replace ( /\.js$/, '.d.ts' );
+
+  },
+
+  hasDiagnosticError ( filePath, code, messagePart ) {
+
+    const program = TypeScript.createProgram ( [filePath], {} ),
+          diagnostics = TypeScript.getPreEmitDiagnostics ( program ),
+          diagnostic = diagnostics.find ( diagnostic => diagnostic.code === code && _.includes ( diagnostic.messageText, messagePart ) );
+
+    return !!diagnostic;
 
   },
 
@@ -65,19 +76,27 @@ const DTS = {
 
       if ( !isSimpleExport ) Utils.exit ( 'Only simple default exports are supported' );
 
-      const exportLines = [
-        `declare const ${namespace}: typeof ${exportName} & {`,
-        `${indentation}default: typeof ${exportName};`,
-        `}`,
-        `declare namespace ${namespace} {`,
-        `${indentation}export type type = ${exportName};`,
-        `}`,
-        `export = ${namespace};`
-      ];
+      for ( let exportTypes = 0; exportTypes <= 1; exportTypes++ ) { // Trying a bunch of different export types (ie. exporting the type of classes or functions is different)
 
-      content = content.replace ( DTS.re.exportDefault, exportLines.join ( '\n' ) );
+        const exportLines = [
+          `declare const ${namespace}: typeof ${exportName} & {`,
+          `${indentation}default: typeof ${exportName};`,
+          `}`,
+          `declare namespace ${namespace} {`,
+          `${indentation}export type type = ${!exportTypes ? exportName : `typeof ${exportName}`};`,
+          `}`,
+          `export = ${namespace};`
+        ];
 
-      Utils.file.write ( filePath, content );
+        const result = content.replace ( DTS.re.exportDefault, exportLines.join ( '\n' ) );
+
+        Utils.file.write ( filePath, result );
+
+        if ( !DTS.hasDiagnosticError ( filePath, 2304, `'${exportName}'` ) ) return; // Export not found error
+
+      }
+
+      Utils.exit ( 'Couldn\'t write a proper export declaration' );
 
     }
 

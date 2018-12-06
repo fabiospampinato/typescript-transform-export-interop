@@ -74,10 +74,10 @@ const JS = {
         'Object.defineProperty(module.exports, "__esModule", { value: true });'
       ];
 
-      content = content.replace ( JS.re.__esModule, '' )
-                      .replace ( JS.re.exportDefault, exportLines.join ( '\n' ) );
+      const result = content.replace ( JS.re.__esModule, '' )
+                            .replace ( JS.re.exportDefault, exportLines.join ( '\n' ) );
 
-      Utils.file.write ( filePath, content );
+      Utils.file.write ( filePath, result );
 
     }
 
