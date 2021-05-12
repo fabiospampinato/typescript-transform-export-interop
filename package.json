@@ -1,7 +1,7 @@
 {
   "name": "typescript-transform-export-interop",
   "description": "TypeScript transform for exporting a module that can be easily imported both from TypeScript and from Node.js.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "bin": {
     "typescript-transform-export-interop": "dist/src/bin/index.js",
     "tstei": "dist/src/bin/index.js"
