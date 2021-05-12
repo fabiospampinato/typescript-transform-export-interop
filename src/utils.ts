@@ -1,9 +1,8 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
 import * as fs from 'fs';
-import chalk from 'chalk';
+import {color} from 'specialist';
 
 /* UTILS */
 
@@ -11,7 +10,7 @@ const Utils = {
 
   exit ( msg ) {
 
-    console.error ( chalk.red ( `[typescript-transform-export-interop] ${msg}` ) );
+    console.error ( color.red ( `[typescript-transform-export-interop] ${msg}` ) );
 
     process.exit ( 1 );
 
@@ -19,10 +18,12 @@ const Utils = {
 
   parseRe ( re ) {
 
-    return _.reduce ( re, ( acc, re, key ) => {
-      acc[key] = new RegExp ( re.source.replace ( / +/g, '\\s*' ), re.flags );
-      return acc;
-    }, {} );
+    for ( const key in re ) {
+      const value = re[key];
+      re[key] = new RegExp ( value.source.replace ( / +/g, '\\s*' ), value.flags );
+    }
+
+    return re;
 
   },
 

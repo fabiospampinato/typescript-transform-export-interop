@@ -1,7 +1,6 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
 import * as detectIndent from 'detect-indent';
 import matches from 'string-matches';
 import * as TypeScript from 'typescript';
@@ -35,7 +34,7 @@ const DTS = {
 
     const program = TypeScript.createProgram ( [filePath], {} ),
           diagnostics = TypeScript.getPreEmitDiagnostics ( program ),
-          diagnostic = diagnostics.find ( diagnostic => diagnostic.code === code && _.includes ( diagnostic.messageText, messagePart ) );
+          diagnostic = diagnostics.find ( diagnostic => diagnostic.code === code && ( diagnostic.messageText['messageText'] || diagnostic.messageText ).includes ( messagePart ) );
 
     return !!diagnostic;
 
@@ -64,7 +63,7 @@ const DTS = {
       let namespace;
 
       for ( let i = 1;; i++ ) {
-        const name = `${_.repeat ( '_', i )}default`;
+        const name = `${'_'.repeat ( i )}default`;
         if ( content.includes ( name ) ) continue;
         namespace = name;
         break;

@@ -3,14 +3,14 @@
   "description": "TypeScript transform for exporting a module that can be easily imported both from TypeScript and from Node.js.",
   "version": "1.0.2",
   "bin": {
-    "typescript-transform-export-interop": "dist/bin/index.js",
-    "tstei": "dist/bin/index.js"
+    "typescript-transform-export-interop": "dist/src/bin/index.js",
+    "tstei": "dist/src/bin/index.js"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "clean": "rimraf dist",
-    "compile": "tsc --skipLibCheck && node ./dist/bin/index.js",
+    "compile": "tsc --skipLibCheck && node ./dist/src/bin/index.js",
     "compile:watch": "tsc --skipLibCheck --watch",
     "prepublishOnly": "npm run clean && npm run compile"
   },
@@ -35,21 +35,17 @@
     "node"
   ],
   "dependencies": {
-    "@types/lodash": "^4.14.118",
-    "@types/node": "^10.12.8",
-    "caporal": "git://github.com/fabiospampinato/Caporal.js#cf0f5eeefb2e04cc07798bf4a45d6bda5e2a2f63",
-    "chalk": "^2.4.1",
     "detect-indent": "^5.0.0",
-    "lodash": "^4.17.11",
+    "find-up-json": "^1.0.0",
     "minimist": "^1.2.0",
-    "read-pkg-up": "^2.0.0",
-    "string-matches": "^1.1.1",
-    "update-notifier": "^2.2.0"
+    "specialist": "^0.3.0",
+    "string-matches": "^1.1.1"
   },
   "peerDependencies": {
     "typescript": "*"
   },
   "devDependencies": {
+    "@types/node": "^10.12.8",
     "rimraf": "^2.6.0",
     "typescript": "^3.0.3"
   }

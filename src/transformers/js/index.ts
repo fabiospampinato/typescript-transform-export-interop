@@ -1,9 +1,9 @@
 
 /* IMPORT */
 
+import findUp from 'find-up-json';
 import * as minimist from 'minimist';
 import * as path from 'path';
-import * as readPkgUp from 'read-pkg-up';
 import matches from 'string-matches';
 import Utils from '../../utils';
 
@@ -30,13 +30,13 @@ const JS = {
 
     }
 
-    const {pkg, path: pkgPath} = readPkgUp.sync ();
+    const pkg = findUp ( 'package.json' );
 
-    if ( pkg && pkg.main ) {
+    if ( pkg ) {
 
-      if ( path.isAbsolute ( pkg.main ) ) return pkg.main;
+      if ( path.isAbsolute ( pkg.content.main ) ) return pkg.content.main;
 
-      return path.resolve ( path.dirname ( pkgPath ), pkg.main );
+      return path.resolve ( path.dirname ( pkg.path ), pkg.content.main );
 
     }
 

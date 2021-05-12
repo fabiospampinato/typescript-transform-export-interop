@@ -2,8 +2,18 @@
 
 /* IMPORT */
 
-import CLI from '../cli';
+import {program, updater} from 'specialist';
+import {name, version} from '../../package.json';
+import transform from '..';
 
-/* CLI */
+/* MAIN */
 
-CLI ();
+updater ({ name, version });
+
+program
+  .name ( name )
+  .version ( version )
+  .arguments ( '[entryfile]' )
+  .action ( transform );
+
+program.parse ();
