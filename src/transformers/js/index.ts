@@ -32,7 +32,7 @@ const JS = {
 
     const pkg = findUp ( 'package.json' );
 
-    if ( pkg ) {
+    if ( pkg && pkg.content.main ) {
 
       if ( path.isAbsolute ( pkg.content.main ) ) return pkg.content.main;
 
